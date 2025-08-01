@@ -98,7 +98,7 @@ export const onSaveEmailTemplate = async (
   campainId: string
 ) => {
   try {
-    const newTemplate = await db.campaign.update({
+    await db.campaign.update({
       where: {
         id: campainId,
       },

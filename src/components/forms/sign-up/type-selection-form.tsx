@@ -28,7 +28,7 @@ const TypeSelectionForm = ({ register, userType, setUserType }: Props) => {
         register={register}
         userType={userType}
         setUserType={setUserType}
-        title="I'm a student"
+        title="I&apos;m a student"
         text="Looking to learn about the tool."
         value="student"
       />

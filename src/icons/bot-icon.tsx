@@ -1,6 +1,6 @@
-import React from 'react'
+import { FC } from 'react'
 
-export const BotIcon = () => {
+export const BotIcon: FC = () => {
   return (
     <svg
       width="32"

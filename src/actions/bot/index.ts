@@ -8,7 +8,10 @@ import { onMailer } from "../mailer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ORIGIN } from "@/config/origin";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_KEY!);
+if (!process.env.GEMINI_AI_KEY) {
+  throw new Error('GEMINI_AI_KEY environment variable is not set');
+}
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const onStoreConversations = async (
@@ -167,7 +170,7 @@ export const onAiChatBotAssistant = async (
         // If customer exists and chat room is live
         if (checkCustomer && checkCustomer.customer[0].chatRoom[0].live) {
           await onStoreConversations(
-            checkCustomer?.customer[0].chatRoom[0].id!,
+            checkCustomer?.customer[0]?.chatRoom[0]?.id ?? '',
             message,
             author
           );
@@ -286,7 +289,7 @@ export const onAiChatBotAssistant = async (
             };
 
             await onStoreConversations(
-              checkCustomer?.customer[0].chatRoom[0].id!,
+              checkCustomer?.customer[0]?.chatRoom[0]?.id ?? '',
               response.content,
               "assistant"
             );
