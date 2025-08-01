@@ -6,7 +6,7 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET!, {
   typescript: true,
-  apiVersion: "2024-10-28.acacia",
+  apiVersion: "2025-02-24.acacia",
 });
 
 export async function GET() {
@@ -155,10 +155,10 @@ export async function GET() {
     });
 
     return NextResponse.json({ url: accountLink.url });
-  } catch (error) {
+  } catch (error: any) {
     console.error(
       "An error occurred when calling the Stripe API to create an account:",
-      error
+      error.message
     );
     return NextResponse.json(
       { error: "Internal server error" },
