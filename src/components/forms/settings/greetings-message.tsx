@@ -23,7 +23,7 @@ const GreetingsMessage = ({
       <div className="lg:w-[500px]">
         <FormGenerator
           placeholder={message}
-          inputType="textarea"
+          inputType="text-area"
           lines={2}
           register={register}
           errors={errors}

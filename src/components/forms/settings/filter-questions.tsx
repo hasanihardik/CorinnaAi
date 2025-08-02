@@ -49,7 +49,7 @@ const FilterQuestions = ({ id }: Props) => {
               message="The anwer for the question above"
             />
             <FormGenerator
-              inputType="textarea"
+              inputType="text-area"
               register={register}
               errors={errors}
               form="filter-questions-form"

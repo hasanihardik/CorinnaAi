@@ -47,7 +47,7 @@ const HelpDesk = ({ id }: Props) => {
               message="The answer for the question above."
             />
             <FormGenerator
-              inputType="textarea"
+              inputType="text-area"
               register={register}
               errors={errors}
               name="answer"
