@@ -1,10 +1,10 @@
 'use server'
 
-import { db } from '@/lib/db'
+import { client } from '@/lib/prisma'
 
 export const onGetDomainProductsAndConnectedAccountId = async (id: string) => {
   try {
-    const connectedAccount = await db.domain.findUnique({
+    const connectedAccount = await client.domain.findUnique({
       where: {
         id,
       },
@@ -17,7 +17,7 @@ export const onGetDomainProductsAndConnectedAccountId = async (id: string) => {
       },
     })
 
-    const products = await db.product.findMany({
+    const products = await client.product.findMany({
       where: {
         domainId: id,
       },
@@ -29,7 +29,7 @@ export const onGetDomainProductsAndConnectedAccountId = async (id: string) => {
     })
 
     if (products) {
-      const totalAmount = products.reduce((current : any, next : any) => {
+      const totalAmount = products.reduce((current, next) => {
         return current + next.price
       }, 0)
       return {

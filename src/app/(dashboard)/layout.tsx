@@ -1,16 +1,15 @@
-import { onLoginUser } from "@/actions/auth";
-import SideBar from "@/components/sidebar";
-import { ChatProvider } from "@/context/user-chat-context";
-import React from "react";
+import { onLoginUser } from '@/actions/auth'
+import SideBar from '@/components/sidebar'
+import { ChatProvider } from '@/context/user-chat-context'
+import React from 'react'
 
 type Props = {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
-export default async function DashboardLayout({ children }: Props) {
-  const authenticated = await onLoginUser();
-
-  if (!authenticated) return null;
+const OwnerLayout = async ({ children }: Props) => {
+  const authenticated = await onLoginUser()
+  if (!authenticated) return null
 
   return (
     <ChatProvider>
@@ -21,5 +20,7 @@ export default async function DashboardLayout({ children }: Props) {
         </div>
       </div>
     </ChatProvider>
-  );
+  )
 }
+
+export default OwnerLayout

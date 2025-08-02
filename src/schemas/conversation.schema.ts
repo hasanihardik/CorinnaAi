@@ -1,5 +1,5 @@
 import { ZodType, z } from 'zod'
-import { ACCEPTED_FILE_TYPES, MAX_UPLOAD_SIZE } from './settings.schemas'
+import { ACCEPTED_FILE_TYPES, MAX_UPLOAD_SIZE } from './settings.schema'
 
 export type ConversationSearchProps = {
   query: string

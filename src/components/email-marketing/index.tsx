@@ -4,7 +4,7 @@ import React from 'react'
 import { CustomerTable } from './customer-table'
 import { Button } from '../ui/button'
 import { Plus } from 'lucide-react'
-import Modal from '../modal'
+import Modal from '../mondal'
 import { Card, CardContent, CardDescription, CardTitle } from '../ui/card'
 import { Loader } from '../loader'
 import FormGenerator from '../forms/form-generator'
@@ -118,7 +118,7 @@ const EmailMarketing = ({ campaign, domains, subscription }: Props) => {
                 key={camp.id}
                 className={cn(
                   'p-5 min-w-[600px] cursor-pointer',
-                  campaignId == camp.id ? 'bg-gray-50 dark:bg-zinc-800' : ''
+                  campaignId == camp.id ? 'bg-gray-50' : ''
                 )}
                 onClick={() => onSelectCampaign(camp.id)}
               >
@@ -146,7 +146,7 @@ const EmailMarketing = ({ campaign, domains, subscription }: Props) => {
                           title="Edit Email"
                           description="This email will be sent to campaign members"
                           trigger={
-                            <Card className="rounded-lg cursor-pointer bg-grandis py-2 px-5 font-semibold text-sm hover:bg-orange text-gray-700 dark:text-white">
+                            <Card className="rounded-lg cursor-pointer bg-grandis py-2 px-5 font-semibold text-sm hover:bg-orange text-gray-700">
                               Edit Email
                             </Card>
                           }

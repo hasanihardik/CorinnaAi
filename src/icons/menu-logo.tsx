@@ -1,16 +1,15 @@
 import React from 'react'
 
 type MenuLogoProps = {
-  onClick?: () => void;
-  size?: number;
+  onClick(): void
 }
 
-export const MenuLogo = ({ onClick, size }: MenuLogoProps) => {
+export const MenuLogo = ({ onClick }: MenuLogoProps) => {
   return (
     <svg
       onClick={onClick}
-      width={size || 30}
-      height={size || 30}
+      width="30"
+      height="30"
       viewBox="0 0 110 110"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,11 +1,11 @@
 'use server'
 
-import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs/server'
+import { client } from '@/lib/prisma'
+import { currentUser } from '@clerk/nextjs'
 
 export const onDomainCustomerResponses = async (customerId: string) => {
   try {
-    const customerQuestions = await db.customer.findUnique({
+    const customerQuestions = await client.customer.findUnique({
       where: {
         id: customerId,
       },
@@ -31,7 +31,7 @@ export const onDomainCustomerResponses = async (customerId: string) => {
 
 export const onGetAllDomainBookings = async (domainId: string) => {
   try {
-    const bookings = await db.bookings.findMany({
+    const bookings = await client.bookings.findMany({
       where: {
         domainId,
       },
@@ -57,7 +57,7 @@ export const onBookNewAppointment = async (
   email: string
 ) => {
   try {
-    const booking = await db.customer.update({
+    const booking = await client.customer.update({
       where: {
         id: customerId,
       },
@@ -87,7 +87,7 @@ export const saveAnswers = async (
 ) => {
   try {
     for (const question in questions) {
-      await db.customer.update({
+      await client.customer.update({
         where: { id: customerId },
         data: {
           questions: {
@@ -114,7 +114,7 @@ export const saveAnswers = async (
 
 export const onGetAllBookingsForCurrentUser = async (clerkId: string) => {
   try {
-    const bookings = await db.bookings.findMany({
+    const bookings = await client.bookings.findMany({
       where: {
         Customer: {
           Domain: {
@@ -157,7 +157,7 @@ export const getUserAppointments = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const bookings = await db.bookings.count({
+      const bookings = await client.bookings.count({
         where: {
           Customer: {
             Domain: {

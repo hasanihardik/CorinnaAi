@@ -1,13 +1,12 @@
-"use server";
-import { db } from "@/lib/db";
-import { clerkClient } from "@clerk/clerk-sdk-node";
-import { currentUser } from "@clerk/nextjs/server";
+'use server'
+import { client } from '@/lib/prisma'
+import { clerkClient, currentUser } from '@clerk/nextjs'
 
 export const onIntegrateDomain = async (domain: string, icon: string) => {
-  const user = await currentUser();
-  if (!user) return;
+  const user = await currentUser()
+  if (!user) return
   try {
-    const subscription = await db.user.findUnique({
+    const subscription = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
@@ -23,8 +22,8 @@ export const onIntegrateDomain = async (domain: string, icon: string) => {
           },
         },
       },
-    });
-    const domainExists = await db.user.findFirst({
+    })
+    const domainExists = await client.user.findFirst({
       where: {
         clerkId: user.id,
         domains: {
@@ -33,18 +32,18 @@ export const onIntegrateDomain = async (domain: string, icon: string) => {
           },
         },
       },
-    });
+    })
 
     if (!domainExists) {
       if (
-        (subscription?.subscription?.plan == "STANDARD" &&
+        (subscription?.subscription?.plan == 'STANDARD' &&
           subscription._count.domains < 1) ||
-        (subscription?.subscription?.plan == "PRO" &&
+        (subscription?.subscription?.plan == 'PRO' &&
           subscription._count.domains < 5) ||
-        (subscription?.subscription?.plan == "ULTIMATE" &&
+        (subscription?.subscription?.plan == 'ULTIMATE' &&
           subscription._count.domains < 10)
       ) {
-        const newDomain = await db.user.update({
+        const newDomain = await client.user.update({
           where: {
             clerkId: user.id,
           },
@@ -55,38 +54,38 @@ export const onIntegrateDomain = async (domain: string, icon: string) => {
                 icon,
                 chatBot: {
                   create: {
-                    welcomeMessage: "Hey there, have  a question? Text us here",
+                    welcomeMessage: 'Hey there, have  a question? Text us here',
                   },
                 },
               },
             },
           },
-        });
+        })
 
         if (newDomain) {
-          return { status: 200, message: "Domain successfully added" };
+          return { status: 200, message: 'Domain successfully added' }
         }
       }
       return {
         status: 400,
         message:
           "You've reached the maximum number of domains, upgrade your plan",
-      };
+      }
     }
     return {
       status: 400,
-      message: "Domain already exists",
-    };
+      message: 'Domain already exists',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetSubscriptionPlan = async () => {
   try {
-    const user = await currentUser();
-    if (!user) return;
-    const plan = await db.user.findUnique({
+    const user = await currentUser()
+    if (!user) return
+    const plan = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
@@ -97,20 +96,20 @@ export const onGetSubscriptionPlan = async () => {
           },
         },
       },
-    });
+    })
     if (plan) {
-      return plan.subscription?.plan;
+      return plan.subscription?.plan
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetAllAccountDomains = async () => {
-  const user = await currentUser();
-  if (!user) return;
+  const user = await currentUser()
+  if (!user) return
   try {
-    const domains = await db.user.findUnique({
+    const domains = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
@@ -134,31 +133,31 @@ export const onGetAllAccountDomains = async () => {
           },
         },
       },
-    });
-    return { ...domains };
+    })
+    return { ...domains }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 export const onUpdatePassword = async (password: string) => {
   try {
-    const user = await currentUser();
+    const user = await currentUser()
 
-    if (!user) return null;
-    const update = await clerkClient.users.updateUser(user.id, { password });
+    if (!user) return null
+    const update = await clerkClient.users.updateUser(user.id, { password })
     if (update) {
-      return { status: 200, message: "Password updated" };
+      return { status: 200, message: 'Password updated' }
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetCurrentDomainInfo = async (domain: string) => {
-  const user = await currentUser();
-  if (!user) return;
+  const user = await currentUser()
+  if (!user) return
   try {
-    const userDomain = await db.user.findUnique({
+    const userDomain = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
@@ -190,65 +189,65 @@ export const onGetCurrentDomainInfo = async (domain: string) => {
           },
         },
       },
-    });
+    })
     if (userDomain) {
-      return userDomain;
+      return userDomain
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onUpdateDomain = async (id: string, name: string) => {
   try {
     //check if domain with name exists
-    const domainExists = await db.domain.findFirst({
+    const domainExists = await client.domain.findFirst({
       where: {
         name: {
           contains: name,
         },
       },
-    });
+    })
 
     if (!domainExists) {
-      const domain = await db.domain.update({
+      const domain = await client.domain.update({
         where: {
           id,
         },
         data: {
           name,
         },
-      });
+      })
 
       if (domain) {
         return {
           status: 200,
-          message: "Domain updated",
-        };
+          message: 'Domain updated',
+        }
       }
 
       return {
         status: 400,
-        message: "Oops something went wrong!",
-      };
+        message: 'Oops something went wrong!',
+      }
     }
 
     return {
       status: 400,
-      message: "Domain with this name already exists",
-    };
+      message: 'Domain with this name already exists',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onChatBotImageUpdate = async (id: string, icon: string) => {
-  const user = await currentUser();
+  const user = await currentUser()
 
-  if (!user) return;
+  if (!user) return
 
   try {
-    const domain = await db.domain.update({
+    const domain = await client.domain.update({
       where: {
         id,
       },
@@ -261,30 +260,30 @@ export const onChatBotImageUpdate = async (id: string, icon: string) => {
           },
         },
       },
-    });
+    })
 
     if (domain) {
       return {
         status: 200,
-        message: "Domain updated",
-      };
+        message: 'Domain updated',
+      }
     }
 
     return {
       status: 400,
-      message: "Oops something went wrong!",
-    };
+      message: 'Oops something went wrong!',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onUpdateWelcomeMessage = async (
   message: string,
   domainId: string
 ) => {
   try {
-    const update = await db.domain.update({
+    const update = await client.domain.update({
       where: {
         id: domainId,
       },
@@ -297,35 +296,35 @@ export const onUpdateWelcomeMessage = async (
           },
         },
       },
-    });
+    })
 
     if (update) {
-      return { status: 200, message: "Welcome message updated" };
+      return { status: 200, message: 'Welcome message updated' }
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onDeleteUserDomain = async (id: string) => {
-  const user = await currentUser();
+  const user = await currentUser()
 
-  if (!user) return;
+  if (!user) return
 
   try {
     //first verify that domain belongs to user
-    const validUser = await db.user.findUnique({
+    const validUser = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
       select: {
         id: true,
       },
-    });
+    })
 
     if (validUser) {
       //check that domain belongs to this user and delete
-      const deletedDomain = await db.domain.delete({
+      const deletedDomain = await client.domain.delete({
         where: {
           userId: validUser.id,
           id,
@@ -333,19 +332,19 @@ export const onDeleteUserDomain = async (id: string) => {
         select: {
           name: true,
         },
-      });
+      })
 
       if (deletedDomain) {
         return {
           status: 200,
           message: `${deletedDomain.name} was deleted successfully`,
-        };
+        }
       }
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onCreateHelpDeskQuestion = async (
   id: string,
@@ -353,7 +352,7 @@ export const onCreateHelpDeskQuestion = async (
   answer: string
 ) => {
   try {
-    const helpDeskQuestion = await db.domain.update({
+    const helpDeskQuestion = await client.domain.update({
       where: {
         id,
       },
@@ -374,28 +373,28 @@ export const onCreateHelpDeskQuestion = async (
           },
         },
       },
-    });
+    })
 
     if (helpDeskQuestion) {
       return {
         status: 200,
-        message: "New help desk question added",
+        message: 'New help desk question added',
         questions: helpDeskQuestion.helpdesk,
-      };
+      }
     }
 
     return {
       status: 400,
-      message: "Oops! something went wrong",
-    };
+      message: 'Oops! something went wrong',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetAllHelpDeskQuestions = async (id: string) => {
   try {
-    const questions = await db.helpDesk.findMany({
+    const questions = await client.helpDesk.findMany({
       where: {
         domainId: id,
       },
@@ -404,21 +403,21 @@ export const onGetAllHelpDeskQuestions = async (id: string) => {
         answer: true,
         id: true,
       },
-    });
+    })
 
     return {
       status: 200,
-      message: "New help desk question added",
+      message: 'New help desk question added',
       questions: questions,
-    };
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onCreateFilterQuestions = async (id: string, question: string) => {
   try {
-    const filterQuestion = await db.domain.update({
+    const filterQuestion = await client.domain.update({
       where: {
         id,
       },
@@ -437,27 +436,27 @@ export const onCreateFilterQuestions = async (id: string, question: string) => {
           },
         },
       },
-    });
+    })
 
     if (filterQuestion) {
       return {
         status: 200,
-        message: "Filter question added",
+        message: 'Filter question added',
         questions: filterQuestion.filterQuestions,
-      };
+      }
     }
     return {
       status: 400,
-      message: "Oops! something went wrong",
-    };
+      message: 'Oops! something went wrong',
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetAllFilterQuestions = async (id: string) => {
   try {
-    const questions = await db.filterQuestions.findMany({
+    const questions = await client.filterQuestions.findMany({
       where: {
         domainId: id,
       },
@@ -466,40 +465,40 @@ export const onGetAllFilterQuestions = async (id: string) => {
         id: true,
       },
       orderBy: {
-        question: "asc",
+        question: 'asc',
       },
-    });
+    })
 
     return {
       status: 200,
-      message: "",
+      message: '',
       questions: questions,
-    };
+    }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onGetPaymentConnected = async () => {
   try {
-    const user = await currentUser();
+    const user = await currentUser()
     if (user) {
-      const connected = await db.user.findUnique({
+      const connected = await client.user.findUnique({
         where: {
           clerkId: user.id,
         },
         select: {
           stripeId: true,
         },
-      });
+      })
       if (connected) {
-        return connected.stripeId;
+        return connected.stripeId
       }
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const onCreateNewDomainProduct = async (
   id: string,
@@ -508,7 +507,7 @@ export const onCreateNewDomainProduct = async (
   price: string
 ) => {
   try {
-    const product = await db.domain.update({
+    const product = await client.domain.update({
       where: {
         id,
       },
@@ -521,15 +520,15 @@ export const onCreateNewDomainProduct = async (
           },
         },
       },
-    });
+    })
 
     if (product) {
       return {
         status: 200,
-        message: "Product successfully created",
-      };
+        message: 'Product successfully created',
+      }
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}

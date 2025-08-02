@@ -1,19 +1,19 @@
 'use server'
 
-import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs/server'
+import { client } from '@/lib/prisma'
+import { currentUser } from '@clerk/nextjs'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET!, {
   typescript: true,
-  apiVersion: '2025-02-24.acacia',
+  apiVersion: '2024-04-10',
 })
 
 export const getUserClients = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const clients = await db.customer.count({
+      const clients = await client.customer.count({
         where: {
           Domain: {
             User: {
@@ -35,7 +35,7 @@ export const getUserBalance = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const connectedStripe = await db.user.findUnique({
+      const connectedStripe = await client.user.findUnique({
         where: {
           clerkId: user.id,
         },
@@ -67,7 +67,7 @@ export const getUserPlanInfo = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const plan = await db.user.findUnique({
+      const plan = await client.user.findUnique({
         where: {
           clerkId: user.id,
         },
@@ -102,7 +102,7 @@ export const getUserTotalProductPrices = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const products = await db.product.findMany({
+      const products = await client.product.findMany({
         where: {
           Domain: {
             User: {
@@ -116,11 +116,7 @@ export const getUserTotalProductPrices = async () => {
       })
 
       if (products) {
-        interface Product {
-          price: number
-        }
-
-        const total = products.reduce((total: number, next: Product) => {
+        const total = products.reduce((total, next) => {
           return total + next.price
         }, 0)
 
@@ -136,7 +132,7 @@ export const getUserTransactions = async () => {
   try {
     const user = await currentUser()
     if (user) {
-      const connectedStripe = await db.user.findUnique({
+      const connectedStripe = await client.user.findUnique({
         where: {
           clerkId: user.id,
         },

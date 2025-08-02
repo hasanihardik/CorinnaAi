@@ -26,12 +26,19 @@ export const USER_REGISTRATION_FORM: UserRegistrationProps[] = [
   {
     id: '3',
     inputType: 'input',
+    placeholder: 'Confirm Email',
+    name: 'confirmEmail',
+    type: 'email',
+  },
+  {
+    id: '4',
+    inputType: 'input',
     placeholder: 'Password',
     name: 'password',
     type: 'password',
   },
   {
-    id: '4',
+    id: '5',
     inputType: 'input',
     placeholder: 'Confrim Password',
     name: 'confirmPassword',

@@ -1,21 +1,21 @@
-import { onGetCurrentDomainInfo } from "@/actions/settings";
-import BotTrainingForm from "@/components/forms/settings/bot-training";
-import SettingsForm from "@/components/forms/settings/form";
-import InfoBar from "@/components/infobar";
-import ProductTable from "@/components/products";
-import { redirect } from "next/navigation";
-import React from "react";
+import { onGetCurrentDomainInfo } from '@/actions/settings'
+import BotTrainingForm from '@/components/forms/settings/bot-training'
+import SettingsForm from '@/components/forms/settings/form'
+import InfoBar from '@/components/infobar'
+import ProductTable from '@/components/products'
+import { redirect } from 'next/navigation'
+import React from 'react'
 
-type Props = { params: { domain: string } };
+type Props = { params: { domain: string } }
 
 const DomainSettingsPage = async ({ params }: Props) => {
-  const domain = await onGetCurrentDomainInfo(params.domain);
-  if (!domain) redirect("/dashboard");
+  const domain = await onGetCurrentDomainInfo(params.domain)
+  if (!domain) redirect('/dashboard')
 
   return (
     <>
       <InfoBar />
-      <div className="p-1 overflow-y-auto w-full chat-window flex-1 h-0">
+      <div className="overflow-y-auto w-full chat-window flex-1 h-0">
         <SettingsForm
           plan={domain.subscription?.plan!}
           chatBot={domain.domains[0].chatBot}
@@ -29,7 +29,7 @@ const DomainSettingsPage = async ({ params }: Props) => {
         />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default DomainSettingsPage;
+export default DomainSettingsPage

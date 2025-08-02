@@ -1,12 +1,12 @@
 'use server'
 
-import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs/server'
+import { client } from '@/lib/prisma'
+import { currentUser } from '@clerk/nextjs'
 import nodemailer from 'nodemailer'
 
 export const onGetAllCustomers = async (id: string) => {
   try {
-    const customers = await db.user.findUnique({
+    const customers = await client.user.findUnique({
       where: {
         clerkId: id,
       },
@@ -43,7 +43,7 @@ export const onGetAllCustomers = async (id: string) => {
 
 export const onGetAllCampaigns = async (id: string) => {
   try {
-    const campaigns = await db.user.findUnique({
+    const campaigns = await client.user.findUnique({
       where: {
         clerkId: id,
       },
@@ -72,7 +72,7 @@ export const onCreateMarketingCampaign = async (name: string) => {
     const user = await currentUser()
     if (!user) return null
 
-    const campaign = await db.user.update({
+    const campaign = await client.user.update({
       where: {
         clerkId: user.id,
       },
@@ -98,7 +98,7 @@ export const onSaveEmailTemplate = async (
   campainId: string
 ) => {
   try {
-    const newTemplate = await db.campaign.update({
+    const newTemplate = await client.campaign.update({
       where: {
         id: campainId,
       },
@@ -119,7 +119,7 @@ export const onAddCustomersToEmail = async (
 ) => {
   try {
     console.log(customers, id)
-    const customerAdd = await db.campaign.update({
+    const customerAdd = await client.campaign.update({
       where: {
         id,
       },
@@ -140,7 +140,7 @@ export const onBulkMailer = async (email: string[], campaignId: string) => {
     if (!user) return null
 
     //get the template for this campaign
-    const template = await db.campaign.findUnique({
+    const template = await client.campaign.findUnique({
       where: {
         id: campaignId,
       },
@@ -175,7 +175,7 @@ export const onBulkMailer = async (email: string[], campaignId: string) => {
         }
       })
 
-      const creditsUsed = await db.user.update({
+      const creditsUsed = await client.user.update({
         where: {
           clerkId: user.id,
         },
@@ -200,7 +200,7 @@ export const onGetAllCustomerResponses = async (id: string) => {
   try {
     const user = await currentUser()
     if (!user) return null
-    const answers = await db.user.findUnique({
+    const answers = await client.user.findUnique({
       where: {
         clerkId: user.id,
       },
@@ -239,7 +239,7 @@ export const onGetAllCustomerResponses = async (id: string) => {
 
 export const onGetEmailTemplate = async (id: string) => {
   try {
-    const template = await db.campaign.findUnique({
+    const template = await client.campaign.findUnique({
       where: {
         id,
       },
