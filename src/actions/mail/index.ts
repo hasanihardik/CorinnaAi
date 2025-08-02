@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import nodemailer from 'nodemailer'
 
 export const onGetAllCustomers = async (id: string) => {
@@ -98,7 +98,7 @@ export const onSaveEmailTemplate = async (
   campainId: string
 ) => {
   try {
-    await db.campaign.update({
+    const newTemplate = await db.campaign.update({
       where: {
         id: campainId,
       },

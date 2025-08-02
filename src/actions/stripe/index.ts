@@ -1,12 +1,12 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET!, {
   typescript: true,
-  apiVersion: "2024-10-28.acacia",
+  apiVersion: "2025-02-24.acacia",
 });
 
 export const onCreateCustomerPaymentIntentSecret = async (

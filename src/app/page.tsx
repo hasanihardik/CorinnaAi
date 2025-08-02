@@ -1,6 +1,6 @@
 import IframeChat from "@/components/iframe/iframeChat";
 import NavBar from "@/components/navbar";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -61,7 +61,7 @@ export default async function Home() {
         </p>
         <div className="flex  justify-center gap-4 flex-wrap mt-6">
           {pricingCards.map((card) => (
-            <PricingCard key={card.title} card={card} />
+            <PricingCard card={card} />
           ))}
         </div>
       </section>

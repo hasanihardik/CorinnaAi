@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -8,9 +8,9 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await currentUser();
+  const { userId } = await auth();
 
-  if (user) redirect("/dashboard");
+  if (userId) redirect("/dashboard");
 
   return (
     <div className="h-screen flex justify-center">

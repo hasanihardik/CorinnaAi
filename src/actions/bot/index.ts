@@ -3,15 +3,12 @@
 import { db } from "@/lib/db";
 import { extractEmailsFromString, extractURLfromString } from "@/lib/utils";
 import { onRealTimeChat } from "../conversation";
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import { onMailer } from "../mailer";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ORIGIN } from "@/config/origin";
 
-if (!process.env.GEMINI_AI_KEY) {
-  throw new Error('GEMINI_AI_KEY environment variable is not set');
-}
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_KEY!);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const onStoreConversations = async (
@@ -170,7 +167,7 @@ export const onAiChatBotAssistant = async (
         // If customer exists and chat room is live
         if (checkCustomer && checkCustomer.customer[0].chatRoom[0].live) {
           await onStoreConversations(
-            checkCustomer?.customer[0]?.chatRoom[0]?.id ?? '',
+            checkCustomer?.customer[0].chatRoom[0].id!,
             message,
             author
           );
@@ -220,48 +217,67 @@ export const onAiChatBotAssistant = async (
         );
 
         // Start a new AI chat session
-        const aiChat = await model.startChat({
+        interface ChatHistoryPart {
+          text: string;
+        }
+
+        interface ChatHistoryItem {
+          role: "user" | "model";
+          parts: ChatHistoryPart[];
+        }
+
+        interface AiChat {
+          sendMessage: (message: string) => Promise<ChatCompletion>;
+        }
+
+        interface ChatCompletion {
+          response: {
+            text: () => string;
+          };
+        }
+
+        const aiChat: AiChat = await model.startChat({
           history: [
             {
               role: "user",
               parts: [
                 {
                   text: `
-              You will get an array of questions that you must ask the customer.
+                  You will get an array of questions that you must ask the customer.
 
-              Progress the conversation using those questions.
+                  Progress the conversation using those questions.
 
-              Whenever you ask a question from the array i need you to add a keyword at the end of the question (complete) this keyword is extremely important.
+                  Whenever you ask a question from the array i need you to add a keyword at the end of the question (complete) this keyword is extremely important.
 
-              Do not forget it.
+                  Do not forget it.
 
-              only add this keyword when your asking a question from the array of questions. No other question satisfies this condition
+                  only add this keyword when your asking a question from the array of questions. No other question satisfies this condition
 
-              Always maintain character and stay respectfull.
+                  Always maintain character and stay respectfull.
 
-              The array of questions : [${chatBotDomain.filterQuestions
-                .map((questions) => questions.question)
-                .join(", ")}]
+                  The array of questions : [${chatBotDomain.filterQuestions
+                    .map((questions : any) => questions.question)
+                    .join(", ")}]
 
-              if the customer says something out of context or inapporpriate. Simply say this is beyond you and you will get a real user to continue the conversation. And add a keyword (realtime) at the end.
+                  if the customer says something out of context or inapporpriate. Simply say this is beyond you and you will get a real user to continue the conversation. And add a keyword (realtime) at the end.
 
-              if the customer agrees to book an appointment send them this link ${ORIGIN}/portal/${id}/appointment/${
-                    checkCustomer?.customer[0].id
-                  }
+                  if the customer agrees to book an appointment send them this link ${ORIGIN}/portal/${id}/appointment/${
+                      checkCustomer?.customer[0].id
+                    }
 
-              if the customer wants to buy a product redirect them to the payment page ${ORIGIN}/portal/${id}/payment/${
-                    checkCustomer?.customer[0].id
-                  }
-          `,
+                  if the customer wants to buy a product redirect them to the payment page ${ORIGIN}/portal/${id}/payment/${
+                      checkCustomer?.customer[0].id
+                    }
+              `,
                 },
               ],
-            },
-            ...chat.map((chat) => {
+            } as ChatHistoryItem,
+            ...chat.map((chatItem): ChatHistoryItem => {
               return {
-                role: chat.role === "assistant" ? "model" : chat.role,
+                role: chatItem.role === "assistant" ? "model" : chatItem.role,
                 parts: [
                   {
-                    text: chat.content,
+                    text: chatItem.content,
                   },
                 ],
               };
@@ -289,7 +305,7 @@ export const onAiChatBotAssistant = async (
             };
 
             await onStoreConversations(
-              checkCustomer?.customer[0]?.chatRoom[0]?.id ?? '',
+              checkCustomer?.customer[0].chatRoom[0].id!,
               response.content,
               "assistant"
             );

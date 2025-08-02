@@ -1,7 +1,6 @@
 import React from "react";
 import { Toaster } from '@/components/ui/toaster'
 import { ThemeProvider } from "./theme-provider";
-import { AuthContextProvider } from "@/context/use-auth-context";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -11,9 +10,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       enableSystem
       disableTransitionOnChange
     >
-      <AuthContextProvider>
-        {children}
-      </AuthContextProvider>
+      {children}
       <Toaster />
     </ThemeProvider>
   );

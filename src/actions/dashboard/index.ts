@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET!, {
@@ -116,7 +116,11 @@ export const getUserTotalProductPrices = async () => {
       })
 
       if (products) {
-        const total = products.reduce((total, next) => {
+        interface Product {
+          price: number
+        }
+
+        const total = products.reduce((total: number, next: Product) => {
           return total + next.price
         }, 0)
 

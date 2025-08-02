@@ -5,10 +5,12 @@ import Section from '@/components/section-label'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import React from 'react'
 
-const Page = async () => {
+type Props = {}
+
+const Page = async (props: Props) => {
   const user = await currentUser()
 
   if (!user) return null
@@ -23,7 +25,7 @@ const Page = async () => {
     )
 
   const bookingsExistToday = domainBookings.bookings.filter(
-    (booking) => booking.date.getDate() === today.getDate()
+    (booking:any) => booking.date.getDate() === today.getDate()
   )
 
   return (
@@ -39,7 +41,7 @@ const Page = async () => {
             message="All your bookings for today are mentioned below."
           />
           {bookingsExistToday.length ? (
-            bookingsExistToday.map((booking) => (
+            bookingsExistToday.map((booking : any) => (
               <Card
                 key={booking.id}
                 className="rounded-xl overflow-hidden mt-4"

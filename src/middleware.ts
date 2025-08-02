@@ -1,9 +1,6 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default authMiddleware({
-  publicRoutes: ["/", "/auth(.*)", "/portal(.*)", "/images(.*)"],
-  ignoredRoutes: ["/chatbot"],
-});
+export default clerkMiddleware();
 
 export const config = {
   matcher: [

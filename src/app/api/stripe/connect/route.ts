@@ -1,13 +1,10 @@
 import { ORIGIN } from "@/config/origin";
 import { db } from "@/lib/db";
-import { currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-if (!process.env.STRIPE_SECRET) {
-  throw new Error('STRIPE_SECRET environment variable is not set');
-}
-const stripe = new Stripe(process.env.STRIPE_SECRET, {
+const stripe = new Stripe(process.env.STRIPE_SECRET!, {
   typescript: true,
   apiVersion: "2025-02-24.acacia",
 });
@@ -159,10 +156,9 @@ export async function GET() {
 
     return NextResponse.json({ url: accountLink.url });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     console.error(
       "An error occurred when calling the Stripe API to create an account:",
-      errorMessage
+      error
     );
     return NextResponse.json(
       { error: "Internal server error" },

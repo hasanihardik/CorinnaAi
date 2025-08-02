@@ -1,6 +1,7 @@
 "use server";
 import { db } from "@/lib/db";
-import { clerkClient, currentUser } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/clerk-sdk-node";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const onIntegrateDomain = async (domain: string, icon: string) => {
   const user = await currentUser();
