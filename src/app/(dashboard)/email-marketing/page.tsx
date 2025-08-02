@@ -1,17 +1,17 @@
-import { onGetAllCampaigns, onGetAllCustomers } from '@/actions/mail'
-import EmailMarketing from '@/components/email-marketing'
-import InfoBar from '@/components/infobar'
-import { currentUser } from '@clerk/nextjs'
-import React from 'react'
+import { onGetAllCampaigns, onGetAllCustomers } from "@/actions/mail";
+import EmailMarketing from "@/components/email-marketing";
+import InfoBar from "@/components/infobar";
+import { currentUser } from "@clerk/nextjs";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Page = async (props: Props) => {
-  const user = await currentUser()
+  const user = await currentUser();
 
-  if (!user) return null
-  const customers = await onGetAllCustomers(user.id)
-  const campaigns = await onGetAllCampaigns(user.id)
+  if (!user) return null;
+  const customers = await onGetAllCustomers(user.id);
+  const campaigns = await onGetAllCampaigns(user.id);
 
   return (
     <>
@@ -22,7 +22,7 @@ const Page = async (props: Props) => {
         domains={customers?.domains!}
       />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

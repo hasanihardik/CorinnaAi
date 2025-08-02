@@ -1,10 +1,10 @@
 import OTPInput from '@/components/otp'
-import React from 'react'
+import React from "react";
 
 type Props = {
-  setOTP: React.Dispatch<React.SetStateAction<string>>
-  onOTP: string
-}
+  setOTP: React.Dispatch<React.SetStateAction<string>>;
+  onOTP: string;
+};
 
 const OTPForm = ({ onOTP, setOTP }: Props) => {
   return (
@@ -20,7 +20,7 @@ const OTPForm = ({ onOTP, setOTP }: Props) => {
         />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default OTPForm
+export default OTPForm;

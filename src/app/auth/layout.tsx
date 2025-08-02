@@ -1,16 +1,17 @@
-import { currentUser } from '@clerk/nextjs'
-import Image from 'next/image'
-import { redirect } from 'next/navigation'
-import React from 'react'
+import { currentUser } from "@clerk/nextjs";
+import Image from "next/image";
+import { redirect } from "next/navigation";
+import React from "react";
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 const Layout = async ({ children }: Props) => {
-  const user = await currentUser()
+  const user = await currentUser();
 
-  if (user) redirect('/')
+  console.log(user, "::user");
+  if (user) redirect("/");
 
   return (
     <div className="h-screen flex w-full justify-center">
@@ -20,8 +21,8 @@ const Layout = async ({ children }: Props) => {
           alt="LOGO"
           sizes="100vw"
           style={{
-            width: '20%',
-            height: 'auto',
+            width: "20%",
+            height: "auto",
           }}
           width={0}
           height={0}
@@ -33,7 +34,7 @@ const Layout = async ({ children }: Props) => {
           Hi, I’m your AI powered sales assistant, Corinna!
         </h2>
         <p className="text-iridium md:text-sm mb-10">
-          Corinna is capable of capturing lead information without a form...{' '}
+          Corinna is capable of capturing lead information without a form...{" "}
           <br />
           something never done before 😉
         </p>
@@ -48,7 +49,7 @@ const Layout = async ({ children }: Props) => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

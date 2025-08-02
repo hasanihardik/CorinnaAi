@@ -1,37 +1,34 @@
-'use client'  // Mark the component as a Client Component
+"use client";
+import { useAuthContextHook } from "@/context/use-auth-context";
+import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
+import TypeSelectionForm from "./type-selection-form";
+import dynamic from "next/dynamic";
+import { Spinner } from "@/components/spinner";
 
-import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
-import { useAuthContextHook } from '@/context/use-auth-context'
-import { useFormContext } from 'react-hook-form'
-import TypeSelectionForm from './type-selection-form'
-import { Spinner } from '@/components/spinner'
-
-const LoadingSpinner = () => <Spinner noPadding={false} />
-
-const DetailForm = dynamic(() => import('./account-details-form'), {
+const DetailForm = dynamic(() => import("./account-details-form"), {
   ssr: false,
-  loading: LoadingSpinner,
-})
+  loading: () => <Spinner noPadding />,
+});
 
-const OTPForm = dynamic(() => import('./otp-form'), {
+const OTPForm = dynamic(() => import("./otp-form"), {
   ssr: false,
-  loading: LoadingSpinner,
-})
+  loading: () => <Spinner noPadding />,
+});
 
-type Props = {}
+type Props = {};
 
 const RegistrationFormStep = (props: Props) => {
   const {
     register,
     formState: { errors },
     setValue,
-  } = useFormContext()
-  const { currentStep } = useAuthContextHook()
-  const [onOTP, setOnOTP] = useState<string>('')
-  const [onUserType, setOnUserType] = useState<'owner' | 'student'>('owner')
+  } = useFormContext();
+  const { currentStep, setCurrentStep } = useAuthContextHook();
+  const [onOTP, setOnOTP] = useState<string>("");
+  const [onUserType, setOnUserType] = useState<"owner" | "student">("owner");
 
-  setValue('otp', onOTP)
+  setValue("otp", onOTP);
 
   switch (currentStep) {
     case 1:
@@ -41,24 +38,14 @@ const RegistrationFormStep = (props: Props) => {
           userType={onUserType}
           setUserType={setOnUserType}
         />
-      )
+      );
     case 2:
-      return (
-        <DetailForm
-          errors={errors}
-          register={register}
-        />
-      )
+      return <DetailForm errors={errors} register={register} />;
     case 3:
-      return (
-        <OTPForm
-          onOTP={onOTP}
-          setOTP={setOnOTP}
-        />
-      )
+      return <OTPForm onOTP={onOTP} setOTP={setOnOTP} />;
   }
 
-  return <div>RegistrationFormStep</div>
-}
+  return <div>RegistrationStep</div>;
+};
 
-export default RegistrationFormStep
+export default RegistrationFormStep;

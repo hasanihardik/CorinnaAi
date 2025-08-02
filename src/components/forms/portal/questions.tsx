@@ -1,19 +1,19 @@
-import React from 'react'
-import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form'
-import FormGenerator from '../form-generator'
-import { Button } from '@/components/ui/button'
-import { Loader } from '@/components/loader'
+import React from "react";
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import FormGenerator from "../form-generator";
+import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/loader";
 
 type Props = {
   questions: {
-    id: string
-    question: string
-    answered: string | null
-  }[]
-  register: UseFormRegister<FieldValues>
-  error: FieldErrors<FieldValues>
-  onNext(): void
-}
+    id: string;
+    question: string;
+    answered: string | null;
+  }[];
+  register: UseFormRegister<FieldValues>;
+  error: FieldErrors<FieldValues>;
+  onNext(): void;
+};
 
 const QuestionsForm = ({ questions, register, error, onNext }: Props) => {
   return (
@@ -21,29 +21,31 @@ const QuestionsForm = ({ questions, register, error, onNext }: Props) => {
       <div className="flex justify-center">
         <h2 className="text-4xl font-bold mb-5">Details</h2>
       </div>
-      {questions.map((question) => (
-        <FormGenerator
-          defaultValue={question.answered || ''}
-          key={question.id}
-          name={`question-${question.id}`}
-          errors={error}
-          register={register}
-          label={question.question}
-          type="text"
-          inputType="input"
-          placeholder={question.answered || 'Not answered'}
-        />
-      ))}
+      {questions.length ? (
+        questions.map((question) => (
+          <FormGenerator
+            defaultValue={question.answered || ""}
+            key={question.id}
+            name={`question-${question.id}`}
+            errors={error}
+            register={register}
+            label={question.question}
+            type="text"
+            inputType="input"
+            placeholder={question.answered || "Not answered"}
+          />
+        ))
+      ) : (
+        <div className="text-center font-bold text-sm bg-cream rounded-md p-2">
+          No Questions
+        </div>
+      )}
 
-      <Button
-        className=""
-        type="button"
-        onClick={onNext}
-      >
+      <Button className="" type="button" onClick={onNext}>
         Next
       </Button>
     </div>
-  )
-}
+  );
+};
 
-export default QuestionsForm
+export default QuestionsForm;

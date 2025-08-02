@@ -157,11 +157,7 @@ export const useChatWindow = () => {
         values.content,
         'assistant'
       )
-      //WIP: Remove this line
       if (message) {
-        //remove this
-        // setChats((prev) => [...prev, message.message[0]])
-
         await onRealTimeChat(
           chatRoom!,
           message.message[0].message,

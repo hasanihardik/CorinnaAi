@@ -1,32 +1,32 @@
-import { onGetAllBookingsForCurrentUser } from '@/actions/appointment'
-import AllAppointments from '@/components/appointment/all-appointments'
-import InfoBar from '@/components/infobar'
-import Section from '@/components/section-label'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { currentUser } from '@clerk/nextjs'
-import React from 'react'
+import { onGetAllBookingsForCurrentUser } from "@/actions/appointment";
+import AllAppointments from "@/components/appointment/all-appointments";
+import InfoBar from "@/components/infobar";
+import Section from "@/components/section-label";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { currentUser } from "@clerk/nextjs";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Page = async (props: Props) => {
-  const user = await currentUser()
+  const user = await currentUser();
 
-  if (!user) return null
-  const domainBookings = await onGetAllBookingsForCurrentUser(user.id)
-  const today = new Date()
+  if (!user) return null;
+  const domainBookings = await onGetAllBookingsForCurrentUser(user.id);
+  const today = new Date();
 
   if (!domainBookings)
     return (
       <div className="w-full flex justify-center">
         <p>No Appointments</p>
       </div>
-    )
+    );
 
   const bookingsExistToday = domainBookings.bookings.filter(
     (booking) => booking.date.getDate() === today.getDate()
-  )
+  );
 
   return (
     <>
@@ -55,9 +55,9 @@ const Page = async (props: Props) => {
                       <p className="text-sm">
                         created
                         <br />
-                        {booking.createdAt.getHours()}{' '}
-                        {booking.createdAt.getMinutes()}{' '}
-                        {booking.createdAt.getHours() > 12 ? 'PM' : 'AM'}
+                        {booking.createdAt.getHours()}{" "}
+                        {booking.createdAt.getMinutes()}{" "}
+                        {booking.createdAt.getHours() > 12 ? "PM" : "AM"}
                       </p>
                       <p className="text-sm">
                         Domain <br />
@@ -83,7 +83,7 @@ const Page = async (props: Props) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

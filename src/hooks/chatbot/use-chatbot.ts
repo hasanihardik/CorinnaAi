@@ -25,22 +25,22 @@ export const useChatBot = () => {
   })
   const [currentBot, setCurrentBot] = useState<
     | {
-        name: string
-        chatBot: {
-          id: string
-          icon: string | null
-          welcomeMessage: string | null
-          background: string | null
-          textColor: string | null
-          helpdesk: boolean
-        } | null
-        helpdesk: {
-          id: string
-          question: string
-          answer: string
-          domainId: string | null
-        }[]
-      }
+      name: string
+      chatBot: {
+        id: string
+        icon: string | null
+        welcomeMessage: string | null
+        background: string | null
+        textColor: string | null
+        helpdesk: boolean
+      } | null
+      helpdesk: {
+        id: string
+        question: string
+        answer: string
+        domainId: string | null
+      }[]
+    }
     | undefined
   >()
   const messageWindowRef = useRef<HTMLDivElement | null>(null)

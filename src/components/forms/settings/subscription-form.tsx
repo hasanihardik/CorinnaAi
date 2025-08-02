@@ -1,18 +1,18 @@
-'use client'
-import { Loader } from '@/components/loader'
-import { StripeElements } from '@/components/settings/stripe-elements'
-import SubscriptionCard from '@/components/settings/subscription-card'
-import { Button } from '@/components/ui/button'
-import { useSubscriptions } from '@/hooks/billing/use-billing'
-import React from 'react'
+"use client";
+import { Loader } from "@/components/loader";
+import { StripeElements } from "@/components/settings/stripe-elements";
+import SubscriptionCard from "@/components/settings/subscription-card";
+import { Button } from "@/components/ui/button";
+import { useSubscriptions } from "@/hooks/billing/use-billing";
+import React from "react";
 
 type Props = {
-  plan: 'STANDARD' | 'PRO' | 'ULTIMATE'
-}
+  plan: "STANDARD" | "PRO" | "ULTIMATE";
+};
 
 const SubscriptionForm = ({ plan }: Props) => {
   const { loading, onSetPayment, payment, onUpdatetToFreTier } =
-    useSubscriptions(plan)
+    useSubscriptions(plan);
 
   return (
     <Loader loading={loading}>
@@ -46,14 +46,14 @@ const SubscriptionForm = ({ plan }: Props) => {
           />
         </div>
         <StripeElements payment={payment} />
-        {payment === 'STANDARD' && (
+        {payment === "STANDARD" && (
           <Button onClick={onUpdatetToFreTier}>
             <Loader loading={loading}>Confirm</Loader>
           </Button>
         )}
       </div>
     </Loader>
-  )
-}
+  );
+};
 
-export default SubscriptionForm
+export default SubscriptionForm;

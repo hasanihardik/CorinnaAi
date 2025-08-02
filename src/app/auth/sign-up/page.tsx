@@ -1,11 +1,10 @@
-import ButtonHandler from '@/components/forms/sign-up/button-handlers'
-import SignUpFormProvider from '@/components/forms/sign-up/form-provider'
-import HighLightBar from '@/components/forms/sign-up/highlight-bar'
-import RegistrationFormStep from '@/components/forms/sign-up/registration-step'
+import ButtonHandler from "@/components/forms/sign-up/button-handlers";
+import HighLightBar from "@/components/forms/sign-up/highlight-bar";
+import SignUpFormProvider from "@/components/forms/sign-up/form-provider";
+import RegistrationFormStep from "@/components/forms/sign-up/registration-step";
+import React from "react";
 
-import React from 'react'
-
-type Props = {}
+type Props = {};
 
 const SignUp = (props: Props) => {
   return (
@@ -20,7 +19,7 @@ const SignUp = (props: Props) => {
         </SignUpFormProvider>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

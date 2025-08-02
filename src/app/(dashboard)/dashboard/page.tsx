@@ -1,31 +1,31 @@
-import { getUserAppointments } from '@/actions/appointment'
+import { getUserAppointments } from "@/actions/appointment";
 import {
   getUserBalance,
   getUserClients,
   getUserPlanInfo,
   getUserTotalProductPrices,
   getUserTransactions,
-} from '@/actions/dashboard'
-import DashboardCard from '@/components/dashboard/cards'
-import { PlanUsage } from '@/components/dashboard/plan-usage'
-import InfoBar from '@/components/infobar'
-import { Separator } from '@/components/ui/separator'
-import CalIcon from '@/icons/cal-icon'
-import EmailIcon from '@/icons/email-icon'
-import PersonIcon from '@/icons/person-icon'
-import { TransactionsIcon } from '@/icons/transactions-icon'
-import { DollarSign } from 'lucide-react'
-import React from 'react'
+} from "@/actions/dashboard";
+import DashboardCard from "@/components/dashboard/cards";
+import { PlanUsage } from "@/components/dashboard/plan-usage";
+import InfoBar from "@/components/infobar";
+import { Separator } from "@/components/ui/separator";
+import CalIcon from "@/icons/cal-icon";
+import PersonIcon from "@/icons/person-icon";
+import { TransactionsIcon } from "@/icons/transactions-icon";
+import { DollarSign } from "lucide-react";
+import React from "react";
+export const dynamic = "force-dynamic";
 
-type Props = {}
+type Props = {};
 
 const Page = async (props: Props) => {
-  const clients = await getUserClients()
-  const sales = await getUserBalance()
-  const bookings = await getUserAppointments()
-  const plan = await getUserPlanInfo()
-  const transactions = await getUserTransactions()
-  const products = await getUserTotalProductPrices()
+  const clients = await getUserClients();
+  const sales = await getUserBalance();
+  const bookings = await getUserAppointments();
+  const plan = await getUserPlanInfo();
+  const transactions = await getUserTransactions();
+  const products = await getUserTotalProductPrices();
 
   return (
     <>
@@ -80,16 +80,14 @@ const Page = async (props: Props) => {
             </div>
             <Separator orientation="horizontal" />
             {transactions &&
-              transactions.data.map((transaction) => (
+              transactions.items.map((transaction) => (
                 <div
                   className="flex gap-3 w-full justify-between items-center border-b-2 py-5"
                   key={transaction.id}
                 >
-                  <p className="font-bold">
-                    {transaction.calculated_statement_descriptor}
-                  </p>
+                  <p className="font-bold">{transaction.description}</p>
                   <p className="font-bold text-xl">
-                    ${transaction.amount / 100}
+                    ${Number(transaction.amount) / 100}
                   </p>
                 </div>
               ))}
@@ -97,7 +95,7 @@ const Page = async (props: Props) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
