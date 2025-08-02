@@ -229,7 +229,7 @@ export const onAiChatBotAssistant = async (
                       Always maintain character and stay respectfull.
 
                       The array of questions : [${chatBotDomain.filterQuestions
-                                    .map((questions) => questions.question)
+                                    .map((questions : any) => questions.question)
                                     .join(', ')}]
 
                       if the customer says something out of context or inapporpriate. Simply say this is beyond you and you will get a real user to continue the conversation. And add a keyword (realtime) at the end.
