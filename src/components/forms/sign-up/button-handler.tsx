@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { useAuthContext } from "@/context/use-auth-context";
+import { useAuthContextHook } from "@/context/use-auth-context";
 import { useSignUpForm } from "@/hooks/sign-up/use-sign-up";
 import Link from "next/link";
 import { useFormContext } from "react-hook-form";
@@ -9,7 +9,7 @@ import { useFormContext } from "react-hook-form";
 type Props = {};
 
 const ButtonHandler = (props: Props) => {
-  const { currentStep, setCurrentStep } = useAuthContext();
+  const { currentStep, setCurrentStep } = useAuthContextHook();
   const { formState, getFieldState, getValues } = useFormContext();
   const { onGenerateOTP } = useSignUpForm();
 
@@ -79,7 +79,7 @@ const ButtonHandler = (props: Props) => {
       <Button
         type="submit"
         className="w-full"
-        onClick={() => setCurrentStep((prev) => prev + 1)}
+        onClick={() => setCurrentStep((prev: number) => prev + 1)}
       >
         Continue
       </Button>

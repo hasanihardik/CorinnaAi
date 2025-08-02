@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthContext } from "@/context/use-auth-context";
+import { useAuthContextHook } from "@/context/use-auth-context";
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import TypeSelectionForm from "./type-selection-form";
@@ -24,7 +24,7 @@ const RegistrationFormStep = () => {
     setValue,
   } = useFormContext();
 
-  const { currentStep } = useAuthContext();
+  const { currentStep } = useAuthContextHook();
   const [onOTP, setOnOTP] = useState("");
   const [onUserType, setOnUserType] = useState<"owner" | "student">("owner");
 
@@ -42,7 +42,7 @@ const RegistrationFormStep = () => {
     case 2:
       return <DetailForm register={register} errors={errors} />;
     case 3:
-      return <OTPForm onOTP={onOTP} setOnOTP={setOnOTP} />;
+      return <OTPForm onOTP={onOTP} setOTP={setOnOTP} />;
   }
 };
 
