@@ -1,6 +1,4 @@
 
-![app-ui](https://github.com/Subr1ata/corinna-ai/assets/41237115/a0e4b127-476c-4eef-b4f8-9bb234d41243)
-![iphonecorinna](https://github.com/Subr1ata/corinna-ai/assets/41237115/a655bf53-1a13-4edd-84d6-e326f6b1b5f5)
 
 ## About
 
